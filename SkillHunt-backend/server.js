@@ -1,22 +1,19 @@
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const connectDB = require("./db");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
+// Connect Database (Using `connectDB` function for connection logic)
+connectDB();
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/", { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.log('Database connection error:', err));
-
-
-// Simulated project data
+// Simulated project data (kept for reference if required)
 const projects = [
   { id: 1, title: "AI Project", description: "Description of AI Project" },
   { id: 2, title: "Web Dev Project", description: "Description of Web Dev Project" },
@@ -27,8 +24,11 @@ app.get("/api/project", (req, res) => {
   res.status(200).json(projects);
 });
 
-const authRouter = require("./routes/auth")
-app.use("/api/auth", authRouter);
+// Define Routes
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/teams", require("./routes/teamRoutes"));
+app.use("/api/events", require("./routes/eventRoutes"));
+app.use("/api/auth", require("./routes/auth")); // Auth route integration
 
 // Start the server
 app.listen(PORT, () => {
