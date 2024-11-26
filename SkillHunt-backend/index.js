@@ -6,7 +6,8 @@ const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/project');
 
 // Load environment variables from .env file
-dotenv.config();
+require('dotenv').config();
+//dotenv.config();
 
 const app = express();
 
